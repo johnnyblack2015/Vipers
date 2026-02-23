@@ -1,0 +1,103 @@
+
+<!-- Navigation -->
+<nav class="fixed top-0 left-0 w-full z-50 bg-black/90 backdrop-blur-md border-b border-[#39FF14]/30">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-20">
+      
+      <!-- Logo Area -->
+      <div class="flex items-center gap-3 cursor-pointer" (click)="scrollToSection('hero')">
+        <!-- Logo Icon (SVG) representing a Viper/Lightning -->
+        <div class="w-10 h-10 relative">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-full text-[#39FF14] drop-shadow-[0_0_5px_rgba(57,255,20,0.8)]">
+            <path d="M13 2L3 14H12L11 22L21 10H12L13 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <span class="brand-font text-2xl font-bold tracking-wider text-white">
+          VOLT <span class="text-[#39FF14]">VIPERS</span>
+        </span>
+      </div>
+
+      <!-- Desktop Menu -->
+      <div class="hidden md:block">
+        <div class="ml-10 flex items-baseline space-x-8">
+          <button (click)="scrollToSection('hero')" class="hover:text-[#39FF14] transition-colors duration-300 font-medium tracking-wide">HOME</button>
+          <button (click)="scrollToSection('stats')" class="hover:text-[#00E5FF] transition-colors duration-300 font-medium tracking-wide">STATS</button>
+          <button (click)="scrollToSection('team')" class="hover:text-[#39FF14] transition-colors duration-300 font-medium tracking-wide">THE SQUAD</button>
+          <button (click)="scrollToSection('contact')" class="px-4 py-2 border border-[#00E5FF] text-[#00E5FF] hover:bg-[#00E5FF] hover:text-black transition-all duration-300 rounded font-bold uppercase tracking-wider text-sm">
+            Join the Hive
+          </button>
+        </div>
+      </div>
+
+      <!-- Mobile menu button -->
+      <div class="-mr-2 flex md:hidden">
+        <button (click)="toggleMenu()" type="button" class="inline-flex items-center justify-center p-2 rounded-md text-[#39FF14] hover:text-white hover:bg-gray-800 focus:outline-none">
+          <span class="sr-only">Open main menu</span>
+          @if (!isMenuOpen) {
+            <svg class="block h-8 w-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          } @else {
+            <svg class="block h-8 w-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          }
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Menu -->
+  @if (isMenuOpen) {
+    <div class="md:hidden bg-black/95 border-b border-[#39FF14]">
+      <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 flex flex-col items-center">
+        <button (click)="scrollToSection('hero')" class="block px-3 py-2 text-base font-medium hover:text-[#39FF14] transition-colors">HOME</button>
+        <button (click)="scrollToSection('stats')" class="block px-3 py-2 text-base font-medium hover:text-[#00E5FF] transition-colors">STATS</button>
+        <button (click)="scrollToSection('team')" class="block px-3 py-2 text-base font-medium hover:text-[#39FF14] transition-colors">THE SQUAD</button>
+        <button (click)="scrollToSection('contact')" class="block w-full text-center mt-4 px-5 py-3 border border-[#39FF14] text-[#39FF14] font-bold uppercase tracking-wider">
+          JOIN US
+        </button>
+      </div>
+    </div>
+  }
+</nav>
+
+<!-- Main Content -->
+<main>
+  <div id="hero">
+    <app-hero></app-hero>
+  </div>
+  <div id="stats">
+    <app-stats></app-stats>
+  </div>
+  <div id="team">
+    <app-team></app-team>
+  </div>
+  <div id="contact">
+    <app-contact></app-contact>
+  </div>
+</main>
+
+<!-- Footer -->
+<footer class="bg-black border-t border-[#39FF14]/20 py-8">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4">
+    <div class="flex items-center gap-2">
+       <span class="brand-font text-xl font-bold text-gray-400">
+          VOLT <span class="text-[#39FF14]">VIPERS</span>
+        </span>
+    </div>
+    <div class="text-gray-500 text-sm">
+      &copy; 2024 Volt Vipers Cricket Club. Power & Precision.
+    </div>
+    <div class="flex gap-4">
+      <a href="#" class="text-gray-400 hover:text-[#00E5FF] transition-colors">
+         <!-- Twitter/X Icon -->
+         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg>
+      </a>
+      <a href="#" class="text-gray-400 hover:text-[#39FF14] transition-colors">
+        <!-- Instagram Icon -->
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+      </a>
+    </div>
+  </div>
+</footer>

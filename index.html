@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="utf-8" />
+    <title>Volt Vipers Cricket Club</title>
+    <base href="/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,100..900;1,100..900&family=Orbitron:wght@400..900&display=swap" rel="stylesheet">
+    <style>
+      :root {
+        --neon-green: #39FF14; /* Viper Green */
+        --neon-cyan: #00f3ff; /* Volt Cyan */
+        --bg-dark: #050505;
+      }
+      body {
+        font-family: 'Exo 2', sans-serif;
+        background-color: var(--bg-dark);
+        color: #e5e5e5;
+        overflow-x: hidden;
+      }
+      h1, h2, h3, h4, h5, h6, .brand-font {
+        font-family: 'Orbitron', sans-serif;
+      }
+      
+      /* --- TECHNO EFFECTS --- */
+
+      /* CRT Scanline Overlay */
+      .scanlines {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          to bottom,
+          rgba(255,255,255,0),
+          rgba(255,255,255,0) 50%,
+          rgba(0,0,0,0.1) 50%,
+          rgba(0,0,0,0.1)
+        );
+        background-size: 100% 4px;
+        pointer-events: none;
+        z-index: 100;
+        opacity: 0.6;
+      }
+
+      /* Animated Cyber Grid Background */
+      .cyber-grid {
+        position: absolute;
+        width: 200%;
+        height: 200%;
+        bottom: -50%;
+        left: -50%;
+        background-image: 
+          linear-gradient(rgba(0, 243, 255, 0.3) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(0, 243, 255, 0.3) 1px, transparent 1px);
+        background-size: 40px 40px;
+        transform: perspective(500px) rotateX(60deg);
+        animation: grid-move 20s linear infinite;
+        opacity: 0.15;
+        z-index: 0;
+        mask-image: linear-gradient(to top, rgba(0,0,0,1), transparent);
+        -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,1), transparent);
+      }
+
+      @keyframes grid-move {
+        0% { transform: perspective(500px) rotateX(60deg) translateY(0); }
+        100% { transform: perspective(500px) rotateX(60deg) translateY(40px); }
+      }
+
+      /* Fade In Animation */
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      .animate-fadeIn {
+        animation: fadeIn 0.5s ease-out forwards;
+      }
+
+      /* Neon Flicker Animations */
+      .neon-flicker-green {
+        animation: flicker-green 3s infinite alternate;
+      }
+
+      @keyframes flicker-green {
+        0%, 18%, 22%, 25%, 53%, 57%, 100% {
+          text-shadow: 0 0 4px #fff, 0 0 10px #fff, 0 0 20px var(--neon-green), 0 0 40px var(--neon-green);
+          opacity: 1;
+        }
+        20%, 24%, 55% { text-shadow: none; opacity: 0.5; }
+      }
+
+      .neon-flicker-cyan {
+        animation: flicker-cyan 4s infinite alternate;
+      }
+
+      @keyframes flicker-cyan {
+        0%, 18%, 22%, 25%, 53%, 57%, 100% {
+          text-shadow: 0 0 4px #fff, 0 0 10px #fff, 0 0 20px var(--neon-cyan), 0 0 40px var(--neon-cyan);
+          opacity: 1;
+        }
+        20%, 24%, 55% { text-shadow: none; opacity: 0.5; }
+      }
+
+      /* Slanted Tech Buttons */
+      .clip-path-slant {
+        clip-path: polygon(10% 0, 100% 0, 100% 80%, 90% 100%, 0 100%, 0 20%);
+      }
+      
+      /* Rule Cards */
+      .rule-card {
+        background: rgba(10, 10, 10, 0.8);
+        border-left: 3px solid var(--neon-cyan);
+        transition: all 0.3s ease;
+      }
+      .rule-card:hover {
+        border-left-color: var(--neon-green);
+        box-shadow: -5px 0 15px rgba(57, 255, 20, 0.2);
+        transform: translateX(5px);
+      }
+      .rule-header {
+        background: linear-gradient(90deg, rgba(0, 243, 255, 0.1), transparent);
+      }
+      
+      /* Form Specific Styles */
+      input[type="date"]::-webkit-calendar-picker-indicator {
+        filter: invert(1);
+        cursor: pointer;
+      }
+      select option {
+        background-color: #1a1a1a;
+        color: white;
+      }
+
+    </style>
+<script type="importmap">
+{
+  "imports": {
+    "rxjs": "https://esm.sh/rxjs@^7.8.2?conditions=es2015",
+    "rxjs/operators": "https://esm.sh/rxjs@^7.8.2/operators?conditions=es2015",
+    "rxjs/ajax": "https://esm.sh/rxjs@^7.8.2/ajax?conditions=es2015",
+    "rxjs/webSocket": "https://esm.sh/rxjs@^7.8.2/webSocket?conditions=es2015",
+    "rxjs/testing": "https://esm.sh/rxjs@^7.8.2/testing?conditions=es2015",
+    "rxjs/fetch": "https://esm.sh/rxjs@^7.8.2/fetch?conditions=es2015",
+    "@angular/core": "https://esm.sh/@angular/core@^21.1.4?external=rxjs",
+    "@angular/forms": "https://esm.sh/@angular/forms@^21.1.4?external=rxjs",
+    "@angular/common": "https://esm.sh/@angular/common@^21.1.4?external=rxjs"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+<body class="bg-[#050505] text-[#e5e5e5] relative">
+
+    <!-- CRT Overlay -->
+    <div class="scanlines"></div>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 w-full z-50 bg-black/90 backdrop-blur-md border-b border-[#00f3ff]/20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                
+                <!-- Logo -->
+                <div class="flex items-center gap-3 cursor-pointer group" onclick="scrollToSection('hero')">
+                    <div class="w-12 h-12 relative transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6">
+                        <!-- Replaced SVG with IMG for custom logo -->
+                        <img src="https://picsum.photos/100/100" alt="Volt Vipers Logo" class="w-full h-full object-contain drop-shadow-[0_0_8px_rgba(0,243,255,0.8)]" />
+                    </div>
+                    <span class="brand-font text-2xl font-bold tracking-wider text-white">
+                        <span class="text-[#00f3ff] group-hover:drop-shadow-[0_0_5px_#00f3ff]">VOLT</span>
+                        <span class="text-[#39FF14] group-hover:drop-shadow-[0_0_5px_#39FF14]">VIPERS</span>
+                    </span>
+                </div>
+
+                <!-- Desktop Menu -->
+                <div class="hidden lg:block">
+                    <div class="ml-10 flex items-baseline space-x-8">
+                        <button onclick="scrollToSection('hero')" class="hover:text-[#00f3ff] hover:drop-shadow-[0_0_5px_#00f3ff] transition-all duration-300 font-medium tracking-wide text-sm">HOME</button>
+                        <button onclick="scrollToSection('rules')" class="hover:text-[#00f3ff] hover:drop-shadow-[0_0_5px_#00f3ff] transition-all duration-300 font-medium tracking-wide text-sm">RULES</button>
+                        <button onclick="scrollToSection('about')" class="hover:text-[#00f3ff] hover:drop-shadow-[0_0_5px_#00f3ff] transition-all duration-300 font-medium tracking-wide text-sm">ABOUT</button>
+                        <button onclick="scrollToSection('members')" class="hover:text-[#39FF14] hover:drop-shadow-[0_0_5px_#39FF14] transition-all duration-300 font-medium tracking-wide text-sm">MEMBERS</button>
+                        <button onclick="scrollToSection('faq')" class="hover:text-[#00f3ff] hover:drop-shadow-[0_0_5px_#00f3ff] transition-all duration-300 font-medium tracking-wide text-sm">FAQ</button>
+                        <button onclick="scrollToSection('contact')" class="px-5 py-2 border border-[#39FF14] text-[#39FF14] hover:bg-[#39FF14] hover:text-black hover:shadow-[0_0_20px_#39FF14] transition-all duration-300 font-bold uppercase tracking-wider text-xs clip-path-slant">
+                            REGISTER
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="-mr-2 flex lg:hidden">
+                    <button id="mobile-menu-btn" onclick="toggleMenu()" type="button" class="inline-flex items-center justify-center p-2 rounded-md text-[#00f3ff] hover:text-white hover:bg-gray-800 focus:outline-none">
+                        <span class="sr-only">Open main menu</span>
+                        <svg id="menu-icon-open" class="block h-8 w-8 drop-shadow-[0_0_5px_rgba(0,243,255,0.8)]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                        <svg id="menu-icon-close" class="hidden h-8 w-8 drop-shadow-[0_0_5px_rgba(0,243,255,0.8)]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Panel -->
+        <div id="mobile-menu" class="hidden lg:hidden bg-black/95 border-b border-[#00f3ff] backdrop-blur-xl">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 flex flex-col items-center">
+                <button onclick="scrollToSection('hero')" class="block px-3 py-2 text-base font-medium hover:text-[#00f3ff] transition-colors">HOME</button>
+                <button onclick="scrollToSection('rules')" class="block px-3 py-2 text-base font-medium hover:text-[#00f3ff] transition-colors">RULES</button>
+                <button onclick="scrollToSection('about')" class="block px-3 py-2 text-base font-medium hover:text-[#00f3ff] transition-colors">ABOUT</button>
+                <button onclick="scrollToSection('members')" class="block px-3 py-2 text-base font-medium hover:text-[#39FF14] transition-colors">MEMBERS</button>
+                <button onclick="scrollToSection('faq')" class="block px-3 py-2 text-base font-medium hover:text-[#00f3ff] transition-colors">FAQ</button>
+                <button onclick="scrollToSection('contact')" class="block w-full text-center mt-4 px-5 py-3 border border-[#39FF14] text-[#39FF14] font-bold uppercase tracking-wider hover:bg-[#39FF14] hover:text-black transition-all">
+                    REGISTER
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section -->
+        <div id="hero" class="relative min-h-screen flex items-center justify-center overflow-hidden bg-black">
+            <!-- Animated Grid Background -->
+            <div class="cyber-grid"></div>
+
+            <div class="absolute inset-0 z-0">
+                <div class="absolute inset-0 bg-gradient-to-b from-black/80 via-black/50 to-[#050505] z-10"></div>
+                <img src="https://picsum.photos/1920/1080?grayscale&blur=4" alt="Cricket Stadium Background" class="w-full h-full object-cover opacity-30 mix-blend-overlay"/>
+                <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-[#00f3ff] rounded-full filter blur-[150px] opacity-10 animate-pulse"></div>
+                <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[#39FF14] rounded-full filter blur-[150px] opacity-10"></div>
+            </div>
+
+            <div class="relative z-20 text-center px-4 max-w-5xl mx-auto">
+                
+                <!-- Hero Logo Placeholder -->
+                <div class="mb-8 flex justify-center">
+                    <img src="https://picsum.photos/400/400" alt="Volt Vipers Large Logo" class="w-40 h-40 md:w-56 md:h-56 object-contain drop-shadow-[0_0_30px_rgba(0,243,255,0.4)] animate-fadeIn">
+                </div>
+
+                <h2 class="text-[#00f3ff] font-bold tracking-[0.5em] text-sm md:text-lg mb-4 neon-flicker-cyan border-b border-[#00f3ff]/30 inline-block pb-2">EST. 2026</h2>
+                <h1 class="brand-font text-5xl md:text-7xl lg:text-9xl font-black text-white mb-6 tracking-tighter drop-shadow-2xl">
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#00f3ff] to-[#39FF14]">VOLT VIPERS</span>
+                </h1>
+                <p class="text-gray-300 text-lg md:text-2xl mb-12 max-w-2xl mx-auto font-light leading-relaxed border-l-4 border-[#00f3ff] pl-6 bg-black/30 backdrop-blur-sm py-4">
+                    Precision in every delivery. Power in every shot. <br>
+                    <span class="text-[#00f3ff]">#StrikeWithPower</span>
+                </p>
+
+                <div class="flex flex-col sm:flex-row gap-8 justify-center items-center">
+                    <button onclick="scrollToSection('contact')" class="group relative px-10 py-5 bg-transparent text-white font-black uppercase tracking-widest text-lg clip-path-slant transition-all duration-300 transform hover:-translate-y-1 hover:text-black">
+                         <!-- Button Background Animation -->
+                         <div class="absolute inset-0 bg-[#39FF14] opacity-80 group-hover:opacity-100 transition-all"></div>
+                         <div class="absolute inset-0 bg-[#39FF14] blur-md opacity-40 group-hover:opacity-70 transition-all"></div>
+                        <span class="relative z-10 flex items-center gap-2">
+                             Join the Hive 
+                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                        </span>
+                    </button>
+                    
+                    <button onclick="scrollToSection('rules')" class="group relative px-10 py-5 border border-[#00f3ff] text-[#00f3ff] font-bold uppercase tracking-widest text-lg hover:bg-[#00f3ff]/10 transition-colors duration-300 clip-path-slant">
+                         <span class="relative z-10 group-hover:drop-shadow-[0_0_5px_#00f3ff] transition-all">Read Rules</span>
+                         <div class="absolute inset-0 bg-[#00f3ff]/5 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></div>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce text-[#00f3ff]/50">
+                <svg class="w-8 h-8 drop-shadow-[0_0_5px_#00f3ff]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+                </svg>
+            </div>
+        </div>
+
+        <!-- Rules Section -->
+        <div id="rules" class="py-24 bg-[#080808] border-t border-[#00f3ff]/10 relative">
+             <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <h2 class="brand-font text-4xl md:text-5xl font-bold text-white mb-4">CLUB <span class="text-[#00f3ff]">RULES</span></h2>
+                    <p class="text-gray-400">Constitution & Code of Conduct</p>
+                    <div class="h-1 w-32 bg-gradient-to-r from-[#00f3ff] to-[#39FF14] mx-auto mt-4"></div>
+                </div>
+
+                <div class="grid gap-8">
+                    <!-- I. Membership -->
+                    <div class="rule-card p-6 rounded-r-lg">
+                        <div class="rule-header p-2 mb-4 border-b border-gray-800">
+                            <h3 class="text-xl font-bold text-white"><span class="text-[#00f3ff]">I.</span> Membership & Eligibility (VV-MEM)</h3>
+                        </div>
+                        <ul class="space-y-4 text-gray-300 text-sm md:text-base">
+                            <li class="flex gap-3">
+                                <span class="text-[#39FF14] font-mono min-w-[90px]">VV-MEM-01</span>
+                                <span><strong class="text-white">Age Criteria:</strong> Membership is open to individuals aged 16 years and above. The maximum age for active playing membership is 50 years. Any player aged 50 must provide a valid medical fitness certificate.</span>
+                            </li>
+                            <li class="flex gap-3">
+                                <span class="text-[#39FF14] font-mono min-w-[90px]">VV-MEM-02</span>
+                                <span><strong class="text-white">Documentation:</strong> All applicants must provide valid government-issued ID proof (Aadhaar/Passport/Voter ID) at registration.</span>
+                            </li>
+                            <li class="flex gap-3">
+                                <span class="text-[#39FF14] font-mono min-w-[90px]">VV-MEM-03</span>
+                                <span><strong class="text-white">Non-Transferability:</strong> Membership is individual and cannot be transferred or shared.</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- II. Code of Conduct -->
+                    <div class="rule-card p-6 rounded-r-lg">
+                        <div class="rule-header p-2 mb-4 border-b border-gray-800">
+                            <h3 class="text-xl font-bold text-white"><span class="text-[#00f3ff]">II.</span> Code of Conduct (VV-CON)</h3>
+                        </div>
+                        <ul class="space-y-4 text-gray-300 text-sm md:text-base">
+                            <li class="flex gap-3"><span class="text-[#39FF14] font-mono min-w-[90px]">VV-CON-01</span><span><strong class="text-white">Spirit of Cricket:</strong> Players must maintain the highest standard of sportsmanship.</span></li>
+                            <li class="flex gap-3"><span class="text-[#39FF14] font-mono min-w-[90px]">VV-CON-02</span><span><strong class="text-white">Umpire Interaction:</strong> The Umpire’s decision is final. Only the Captain may discuss a decision.</span></li>
+                            <li class="flex gap-3"><span class="text-[#39FF14] font-mono min-w-[90px]">VV-CON-03</span><span><strong class="text-white">Substance Policy:</strong> Alcohol, tobacco, or banned substances are strictly forbidden during matches or practice.</span></li>
+                            <li class="flex gap-3"><span class="text-[#39FF14] font-mono min-w-[90px]">VV-CON-04</span><span><strong class="text-white">Equipment Misconduct:</strong> Intentional damage to kit will result in a fine equivalent to one match fee.</span></li>
+                            <li class="flex gap-3"><span class="text-[#39FF14] font-mono min-w-[90px]">VV-CON-05</span><span><strong class="text-white">Social Media:</strong> Members shall not post content that brings the Volt Vipers into disrepute.</span></li>
+                        </ul>
+                    </div>
+
+                    <!-- III. Payments -->
+                    <div class="rule-card p-6 rounded-r-lg">
+                         <div class="rule-header p-2 mb-4 border-b border-gray-800">
+                            <h3 class="text-xl font-bold text-white"><span class="text-[#00f3ff]">III.</span> Payments & Financials (VV-PAY)</h3>
+                        </div>
+                        <ul class="space-y-4 text-gray-300 text-sm md:text-base">
+                            <li class="flex gap-3"><span class="text-[#39FF14] font-mono min-w-[90px]">VV-PAY-01</span><span><strong class="text-white">Registration:</strong> ₹2,000/- INR (One-time). Covers official jersey and kit access.</span></li>
+                            <li class="flex gap-3"><span class="text-[#39FF14] font-mono min-w-[90px]">VV-PAY-02</span><span><strong class="text-white">Yearly Subscription:</strong> ₹1,000/- INR due by Jan 10th annually.</span></li>
+                            <li class="flex gap-3"><span class="text-[#39FF14] font-mono min-w-[90px]">VV-PAY-03</span><span><strong class="text-white">Late Payment:</strong> Grace period until Jan 15th. Failure results in suspension.</span></li>
+                             <li class="flex gap-3"><span class="text-[#39FF14] font-mono min-w-[90px]">VV-PAY-04</span><span><strong class="text-white">Match Day Opt-in:</strong> Match fees must be sent immediately upon polling to confirm spot.</span></li>
+                        </ul>
+                    </div>
+
+                    <!-- IV. Refund Policy -->
+                    <div class="rule-card p-6 rounded-r-lg">
+                        <div class="rule-header p-2 mb-4 border-b border-gray-800">
+                             <h3 class="text-xl font-bold text-white"><span class="text-[#00f3ff]">IV.</span> Refund & Cancellation (VV-REF)</h3>
+                        </div>
+                        <div class="text-gray-300 text-sm md:text-base pl-[102px]">
+                            <p class="mb-2"><strong class="text-white">VV-REF-01 (Opt-out Policy):</strong></p>
+                            <ul class="list-disc pl-4 space-y-1">
+                                <li><strong>>72 Hours:</strong> Full refund.</li>
+                                <li><strong>24-72 Hours:</strong> Refund only if a replacement is found.</li>
+                                <li><strong><24 Hours / No-Show:</strong> Non-refundable.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- V & VII. Match Day & Equipment -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="rule-card p-6 rounded-r-lg">
+                             <div class="rule-header p-2 mb-4 border-b border-gray-800">
+                                <h3 class="text-xl font-bold text-white"><span class="text-[#00f3ff]">V.</span> Match Day (VV-MAT)</h3>
+                            </div>
+                            <ul class="space-y-4 text-gray-300 text-sm md:text-base">
+                                <li class="flex gap-3"><span class="text-[#39FF14] font-mono min-w-[90px]">VV-MAT-01</span><span>Arrive 20 mins prior to start.</span></li>
+                                <li class="flex gap-3"><span class="text-[#39FF14] font-mono min-w-[90px]">VV-MAT-02</span><span>Only official Volt Vipers jersey allowed.</span></li>
+                            </ul>
+                        </div>
+                        <div class="rule-card p-6 rounded-r-lg">
+                             <div class="rule-header p-2 mb-4 border-b border-gray-800">
+                                <h3 class="text-xl font-bold text-white"><span class="text-[#00f3ff]">VII.</span> Equipment (VV-EQP)</h3>
+                            </div>
+                            <ul class="space-y-4 text-gray-300 text-sm md:text-base">
+                                <li class="flex gap-3"><span class="text-[#39FF14] font-mono min-w-[90px]">VV-EQP-01</span><span>Helmets mandatory for batsmen & keepers standing up.</span></li>
+                                <li class="flex gap-3"><span class="text-[#39FF14] font-mono min-w-[90px]">VV-EQP-03</span><span>Intentional damage to kit must be paid for in full.</span></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- VI. Disciplinary Actions -->
+                     <div class="rule-card p-6 rounded-r-lg">
+                        <div class="rule-header p-2 mb-4 border-b border-gray-800">
+                            <h3 class="text-xl font-bold text-white"><span class="text-[#00f3ff]">VI.</span> Disciplinary Actions (VV-DIS)</h3>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="text-[#00f3ff] border-b border-gray-700">
+                                        <th class="p-3">Code</th>
+                                        <th class="p-3">Offense</th>
+                                        <th class="p-3">Penalty</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-gray-300 text-sm">
+                                    <tr class="border-b border-gray-800 hover:bg-white/5">
+                                        <td class="p-3 font-mono text-[#39FF14]">VV-DIS-01</td>
+                                        <td class="p-3">Minor Dissent / Lateness</td>
+                                        <td class="p-3">Batsmen: -2 places | Bowlers: -1 over</td>
+                                    </tr>
+                                    <tr class="border-b border-gray-800 hover:bg-white/5">
+                                        <td class="p-3 font-mono text-[#39FF14]">VV-DIS-02</td>
+                                        <td class="p-3">Medium Breach (Arguing w/ Umpire)</td>
+                                        <td class="p-3">1-match suspension</td>
+                                    </tr>
+                                    <tr class="border-b border-gray-800 hover:bg-white/5">
+                                        <td class="p-3 font-mono text-[#39FF14]">VV-DIS-03</td>
+                                        <td class="p-3">Serious Breach (Substance/Physical)</td>
+                                        <td class="p-3">Fine (1 match fee) + 3-match suspension</td>
+                                    </tr>
+                                    <tr class="hover:bg-white/5">
+                                        <td class="p-3 font-mono text-[#39FF14]">VV-DIS-04</td>
+                                        <td class="p-3">Severe Breach (Fraud/Violence)</td>
+                                        <td class="p-3 text-red-500 font-bold">Permanent Expulsion</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+             </div>
+        </div>
+
+        <!-- About Section (Includes Stats) -->
+        <div id="about" class="py-24 bg-[#0a0a0a] border-y border-[#00f3ff]/20 relative overflow-hidden">
+             <!-- Tech grid lines background -->
+             <div class="absolute inset-0 opacity-10" style="background-image: linear-gradient(#333 1px, transparent 1px), linear-gradient(90deg, #333 1px, transparent 1px); background-size: 50px 50px;"></div>
+             
+             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-20">
+                    <div>
+                        <h2 class="brand-font text-4xl font-bold text-white mb-6">ABOUT THE <span class="text-[#00f3ff]">VIPERS</span></h2>
+                        <p class="text-gray-400 text-lg leading-relaxed mb-6">
+                            The Volt Vipers were founded on the belief that greatness is built through discipline and integrity. While we play to win, we define ourselves by our professionalism on and off the field—replacing the chaos of the streets with a structured, elite environment where every player is held to a higher standard.
+                        </p>
+                        <p class="text-gray-400 text-lg leading-relaxed">
+                            We are a community that balances lethal precision with the pure joy of the game. For a Viper, the match doesn't just start at the first ball; it begins with the commitment to show up, the respect for the kit, and the loyalty to the squad. We don't just play the game; we elevate it.
+                        </p>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-gray-900/80 p-6 rounded-lg border border-[#00f3ff]/30 text-center">
+                            <h3 id="stat-matches" class="text-5xl font-black text-white mb-2 brand-font">0</h3>
+                            <p class="text-[#00f3ff] text-sm font-bold uppercase tracking-widest">Matches</p>
+                        </div>
+                         <div class="bg-gray-900/80 p-6 rounded-lg border border-[#39FF14]/30 text-center">
+                            <h3 id="stat-titles" class="text-5xl font-black text-white mb-2 brand-font">0</h3>
+                            <p class="text-[#39FF14] text-sm font-bold uppercase tracking-widest">Titles</p>
+                        </div>
+                        <div class="col-span-2 bg-gray-900/80 p-6 rounded-lg border border-gray-700 text-center">
+                             <div class="flex items-baseline justify-center gap-1">
+                                <h3 id="stat-members" class="text-5xl font-black text-white mb-2 brand-font">0</h3>
+                                <span class="text-4xl font-black text-[#39FF14] brand-font">+</span>
+                             </div>
+                             <p class="text-gray-400 text-sm font-bold uppercase tracking-widest">Active Vipers</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Match Schedule Tables -->
+                <div class="mt-12">
+                    <h3 class="brand-font text-3xl font-bold text-center text-white mb-10">MATCH <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#00f3ff] to-[#39FF14]">SCHEDULES</span></h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        
+                        <!-- Table 1: Saturdays -->
+                        <div class="bg-gray-900/50 p-6 rounded-xl border border-gray-800 hover:border-[#00f3ff] transition-all group shadow-lg hover:shadow-[0_0_15px_rgba(0,243,255,0.2)]">
+                            <h3 class="text-2xl font-bold text-white mb-4 text-center border-b border-[#00f3ff]/30 pb-2">
+                                <span class="text-[#00f3ff]">SATURDAYS</span>
+                            </h3>
+                            <table class="w-full text-left text-gray-300">
+                                <tbody>
+                                    <tr class="border-b border-gray-800 group-hover:border-[#00f3ff]/30 transition-colors">
+                                        <th class="py-3 font-medium text-[#00f3ff] w-1/3">Format</th>
+                                        <td class="py-3 pl-4">T20 Matches</td>
+                                    </tr>
+                                    <tr class="border-b border-gray-800 group-hover:border-[#00f3ff]/30 transition-colors">
+                                        <th class="py-3 font-medium text-[#00f3ff]">Ball</th>
+                                        <td class="py-3 pl-4">White Ball</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="py-3 font-medium text-[#00f3ff]">Time</th>
+                                        <td class="py-3 pl-4">7:00 AM - 6:00 PM</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Table 2: Sundays -->
+                        <div class="bg-gray-900/50 p-6 rounded-xl border border-gray-800 hover:border-[#39FF14] transition-all group shadow-lg hover:shadow-[0_0_15px_rgba(57,255,20,0.2)]">
+                            <h3 class="text-2xl font-bold text-white mb-4 text-center border-b border-[#39FF14]/30 pb-2">
+                                <span class="text-[#39FF14]">SUNDAYS</span>
+                            </h3>
+                            <table class="w-full text-left text-gray-300">
+                                <tbody>
+                                    <tr class="border-b border-gray-800 group-hover:border-[#39FF14]/30 transition-colors">
+                                        <th class="py-3 font-medium text-[#39FF14] w-1/3">Format</th>
+                                        <td class="py-3 pl-4">T20 Matches</td>
+                                    </tr>
+                                    <tr class="border-b border-gray-800 group-hover:border-[#39FF14]/30 transition-colors">
+                                        <th class="py-3 font-medium text-[#39FF14]">Ball</th>
+                                        <td class="py-3 pl-4">White Ball</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="py-3 font-medium text-[#39FF14]">Time</th>
+                                        <td class="py-3 pl-4">7:00 AM - 6:00 PM</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Table 3: Weekdays -->
+                        <div class="bg-gray-900/50 p-6 rounded-xl border border-gray-800 hover:border-white transition-all group shadow-lg hover:shadow-[0_0_15px_rgba(255,255,255,0.1)]">
+                            <h3 class="text-2xl font-bold text-white mb-4 text-center border-b border-gray-700 pb-2">
+                                WEEKDAYS
+                            </h3>
+                            <table class="w-full text-left text-gray-300">
+                                <tbody>
+                                    <tr class="border-b border-gray-800 group-hover:border-white/20 transition-colors">
+                                        <th class="py-3 font-medium text-gray-400 w-1/3">Format</th>
+                                        <td class="py-3 pl-4">T20 / T25 / T30</td>
+                                    </tr>
+                                    <tr class="border-b border-gray-800 group-hover:border-white/20 transition-colors">
+                                        <th class="py-3 font-medium text-gray-400">Ball</th>
+                                        <td class="py-3 pl-4">White & Red Ball</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="py-3 font-medium text-gray-400">Time</th>
+                                        <td class="py-3 pl-4">7:00 AM - 6:00 PM</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+
+             </div>
+        </div>
+
+        <!-- Members Section (Renamed from Team) -->
+        <div id="members" class="py-24 bg-[#050505] relative">
+             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <div class="text-center mb-20">
+                    <h2 class="brand-font text-4xl md:text-6xl font-black text-white mb-6 tracking-wide">
+                        THE <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#00f3ff] to-[#39FF14]">MEMBERS</span>
+                    </h2>
+                    <p class="text-gray-400 text-lg max-w-2xl mx-auto">The elite athletes powering the Vipers. Speed, strength, and strategy combined.</p>
+                </div>
+                <!-- JS will inject players here -->
+                <div id="team-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8"></div>
+             </div>
+        </div>
+
+        <!-- FAQ Section -->
+        <div id="faq" class="py-24 bg-[#080808]">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <h2 class="brand-font text-4xl font-bold text-white mb-4">FAQ</h2>
+                    <div class="h-1 w-20 bg-[#00f3ff] mx-auto"></div>
+                </div>
+                
+                <div class="space-y-4">
+                    <!-- Q1 -->
+                    <details class="group bg-gray-900 rounded-lg p-6 cursor-pointer border border-gray-800 hover:border-[#00f3ff] transition-colors">
+                        <summary class="flex justify-between items-center font-bold text-white text-lg list-none">
+                            <span>How do I join the Volt Vipers?</span>
+                            <span class="transition group-open:rotate-180">
+                                <svg fill="none" height="24" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24"><path d="M6 9l6 6 6-6"></path></svg>
+                            </span>
+                        </summary>
+                        <p class="text-gray-400 mt-4 group-open:animate-fadeIn">
+                            Joining is easy. Click the 'Register' button at the top of the page and fill out the form to get started. Once submitted, you'll undergo a phone screening with our team. Successful applicants will then be invited to trials in the nets, where our coaches will assess your skills to determine your selection for the squad.
+                        </p>
+                    </details>
+                    
+                    <!-- Q2 -->
+                     <details class="group bg-gray-900 rounded-lg p-6 cursor-pointer border border-gray-800 hover:border-[#00f3ff] transition-colors">
+                        <summary class="flex justify-between items-center font-bold text-white text-lg list-none">
+                            <span>What are the fees?</span>
+                            <span class="transition group-open:rotate-180">
+                                <svg fill="none" height="24" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24"><path d="M6 9l6 6 6-6"></path></svg>
+                            </span>
+                        </summary>
+                        <p class="text-gray-400 mt-4 group-open:animate-fadeIn">
+                            Joining is straightforward. To get started, there is a trial nets fee of 300/-. If you are selected for the squad following your trials, the annual membership fee is 2000/-. This fee ensures you are fully registered and ready for the season.
+                        </p>
+                    </details>
+
+                    <!-- Q3 -->
+                    <details class="group bg-gray-900 rounded-lg p-6 cursor-pointer border border-gray-800 hover:border-[#00f3ff] transition-colors">
+                        <summary class="flex justify-between items-center font-bold text-white text-lg list-none">
+                            <span>Where do you play matches?</span>
+                            <span class="transition group-open:rotate-180">
+                                <svg fill="none" height="24" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24"><path d="M6 9l6 6 6-6"></path></svg>
+                            </span>
+                        </summary>
+                        <p class="text-gray-400 mt-4 group-open:animate-fadeIn">
+                            We currently compete in tournaments staged across key venues in Aziz Nagar, Moinabad, and Chilkur.
+                        </p>
+                    </details>
+
+                    <!-- Q4 (New) -->
+                    <details class="group bg-gray-900 rounded-lg p-6 cursor-pointer border border-gray-800 hover:border-[#00f3ff] transition-colors">
+                        <summary class="flex justify-between items-center font-bold text-white text-lg list-none">
+                            <span>Do I get to switch batting to bowling in matches?</span>
+                            <span class="transition group-open:rotate-180">
+                                <svg fill="none" height="24" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24"><path d="M6 9l6 6 6-6"></path></svg>
+                            </span>
+                        </summary>
+                        <p class="text-gray-400 mt-4 group-open:animate-fadeIn">
+                            If you are an all-rounder, please note that we will prioritize the specific skill for which you were selected during trials. While we may consider requests to switch roles based on team vacancy and player availability, you should expect to fill only one primary role—either Batter or Bowler—per match.
+                        </p>
+                    </details>
+
+                    <!-- Q5 (New) -->
+                    <details class="group bg-gray-900 rounded-lg p-6 cursor-pointer border border-gray-800 hover:border-[#00f3ff] transition-colors">
+                        <summary class="flex justify-between items-center font-bold text-white text-lg list-none">
+                            <span>What equipment do I need to bring?</span>
+                            <span class="transition group-open:rotate-180">
+                                <svg fill="none" height="24" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24"><path d="M6 9l6 6 6-6"></path></svg>
+                            </span>
+                        </summary>
+                        <div class="text-gray-400 mt-4 group-open:animate-fadeIn">
+                            <p class="mb-2">While membership includes access to the shared team kit, we highly encourage players to invest in their own equipment for personal comfort and performance.</p>
+                            <p class="mb-2">If you do not have a personal kit, you must—for hygiene and safety reasons—provide your own:</p>
+                            <ul class="list-disc pl-5 space-y-1">
+                                <li>Batsman’s inner gloves</li>
+                                <li>Head bandana</li>
+                                <li>Abdomen guard</li>
+                            </ul>
+                        </div>
+                    </details>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact/Registration Section -->
+        <div id="contact" class="py-24 bg-gradient-to-b from-[#0a0a0a] to-black relative border-t border-[#00f3ff]/20">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <h2 class="brand-font text-4xl md:text-5xl font-bold text-white mb-4">JOIN THE <span class="text-[#39FF14]">HIVE</span></h2>
+                    <p class="text-gray-400 uppercase tracking-widest font-bold text-sm">Official Player Registration Form</p>
+                </div>
+                
+                <!-- Contact Information Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+                     <!-- Location -->
+                    <div class="bg-gray-900/40 p-6 rounded-xl border border-gray-800 backdrop-blur-sm text-center hover:border-[#00f3ff]/50 transition-colors group">
+                        <div class="w-12 h-12 bg-[#00f3ff]/10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-[#00f3ff]/20 transition-colors">
+                            <svg class="w-6 h-6 text-[#00f3ff]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                        </div>
+                        <h3 class="text-white font-bold mb-1">Location</h3>
+                        <p class="text-gray-400 text-sm">Moinabad, 501504</p>
+                    </div>
+
+                    <!-- Phone -->
+                    <div class="bg-gray-900/40 p-6 rounded-xl border border-gray-800 backdrop-blur-sm text-center hover:border-[#39FF14]/50 transition-colors group">
+                        <div class="w-12 h-12 bg-[#39FF14]/10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-[#39FF14]/20 transition-colors">
+                            <svg class="w-6 h-6 text-[#39FF14]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
+                        </div>
+                        <h3 class="text-white font-bold mb-1">Phone</h3>
+                        <a href="tel:+917816067765" class="text-gray-400 text-sm hover:text-[#39FF14] transition-colors block">+91 78 16 0677 65</a>
+                    </div>
+
+                    <!-- Email -->
+                    <div class="bg-gray-900/40 p-6 rounded-xl border border-gray-800 backdrop-blur-sm text-center hover:border-[#00f3ff]/50 transition-colors group">
+                        <div class="w-12 h-12 bg-[#00f3ff]/10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-[#00f3ff]/20 transition-colors">
+                            <svg class="w-6 h-6 text-[#00f3ff]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                        </div>
+                        <h3 class="text-white font-bold mb-1">Email</h3>
+                        <a href="mailto:jb@voltvipers.in" class="text-gray-400 text-sm hover:text-[#00f3ff] transition-colors block">jb@voltvipers.in</a>
+                    </div>
+                </div>
+
+                <div class="bg-gray-900/60 p-8 md:p-12 rounded-2xl border border-gray-800 backdrop-blur-md relative overflow-hidden group hover:border-[#39FF14]/30 transition-colors duration-500">
+                    <!-- Form background effect -->
+                    <div class="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-[#39FF14]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                     
+                    <!-- Form Content -->
+                    <form id="contact-form" class="space-y-12 relative z-10">
+                        
+                        <!-- Header -->
+                        <div class="border-b border-gray-800 pb-8">
+                            <h3 class="text-2xl font-bold text-white mb-2">Registration Application</h3>
+                            <p class="text-gray-400 text-sm">Please fill out all details accurately. Fields marked with <span class="text-red-500">*</span> are mandatory.</p>
+                        </div>
+
+                        <!-- Section 1: Personal Information -->
+                        <div class="space-y-6">
+                            <h4 class="text-[#00f3ff] font-bold text-lg uppercase tracking-widest border-l-4 border-[#00f3ff] pl-3">1. Personal Information</h4>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <!-- Full Name -->
+                                <div>
+                                     <label class="block text-gray-400 text-xs font-bold mb-2 uppercase tracking-wide">Full Name <span class="text-red-500">*</span></label>
+                                     <input type="text" name="full_name" required class="w-full bg-black/50 border border-gray-700 text-white px-4 py-3 rounded focus:outline-none focus:border-[#00f3ff] focus:shadow-[0_0_10px_rgba(0,243,255,0.2)] transition-all placeholder-gray-600" placeholder="As per Govt ID">
+                                </div>
+
+                                <!-- DOB -->
+                                <div>
+                                     <label class="block text-gray-400 text-xs font-bold mb-2 uppercase tracking-wide">Date of Birth <span class="text-red-500">*</span></label>
+                                     <input type="date" name="dob" required class="w-full bg-black/50 border border-gray-700 text-white px-4 py-3 rounded focus:outline-none focus:border-[#00f3ff] focus:shadow-[0_0_10px_rgba(0,243,255,0.2)] transition-all placeholder-gray-600">
+                                </div>
+
+                                <!-- Mobile -->
+                                <div>
+                                     <label class="block text-gray-400 text-xs font-bold mb-2 uppercase tracking-wide">Mobile No (WhatsApp) <span class="text-red-500">*</span></label>
+                                     <input type="tel" name="mobile" required class="w-full bg-black/50 border border-gray-700 text-white px-4 py-3 rounded focus:outline-none focus:border-[#00f3ff] focus:shadow-[0_0_10px_rgba(0,243,255,0.2)] transition-all placeholder-gray-600" placeholder="+91 XXXXX XXXXX">
+                                </div>
+
+                                <!-- Occupation (UPDATED: Mandatory) -->
+                                <div>
+                                     <label class="block text-gray-400 text-xs font-bold mb-2 uppercase tracking-wide">Occupation <span class="text-red-500">*</span></label>
+                                     <input type="text" name="occupation" required class="w-full bg-black/50 border border-gray-700 text-white px-4 py-3 rounded focus:outline-none focus:border-[#00f3ff] focus:shadow-[0_0_10px_rgba(0,243,255,0.2)] transition-all placeholder-gray-600" placeholder="e.g. Software Engineer">
+                                </div>
+                                
+                                <!-- Email -->
+                                <div>
+                                    <label class="block text-gray-400 text-xs font-bold mb-2 uppercase tracking-wide">Email Address <span class="text-red-500">*</span></label>
+                                    <input type="email" name="email" required class="w-full bg-black/50 border border-gray-700 text-white px-4 py-3 rounded focus:outline-none focus:border-[#00f3ff] focus:shadow-[0_0_10px_rgba(0,243,255,0.2)] transition-all placeholder-gray-600" placeholder="your@email.com">
+                                </div>
+                                
+                                <!-- Blood Group (UPDATED: Mandatory) -->
+                                <div>
+                                     <label class="block text-gray-400 text-xs font-bold mb-2 uppercase tracking-wide">Blood Group <span class="text-red-500">*</span></label>
+                                     <select name="blood_group" required class="w-full bg-black/50 border border-gray-700 text-gray-300 px-4 py-3 rounded focus:outline-none focus:border-[#00f3ff] focus:shadow-[0_0_10px_rgba(0,243,255,0.2)] transition-all">
+                                        <option value="" disabled selected>Select...</option>
+                                        <option>A+</option> <option>A-</option> <option>B+</option> <option>B-</option>
+                                        <option>O+</option> <option>O-</option> <option>AB+</option> <option>AB-</option>
+                                     </select>
+                                </div>
+
+                                <!-- Address -->
+                                <div class="col-span-2">
+                                     <label class="block text-gray-400 text-xs font-bold mb-2 uppercase tracking-wide">Residential Address <span class="text-red-500">*</span></label>
+                                     <textarea name="address" rows="3" required class="w-full bg-black/50 border border-gray-700 text-white px-4 py-3 rounded focus:outline-none focus:border-[#00f3ff] focus:shadow-[0_0_10px_rgba(0,243,255,0.2)] transition-all placeholder-gray-600" placeholder="Full Address with Pincode"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section 2: Cricketing Profile -->
+                        <div class="space-y-6">
+                            <h4 class="text-[#39FF14] font-bold text-lg uppercase tracking-widest border-l-4 border-[#39FF14] pl-3">2. Cricketing Profile</h4>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                
+                                <!-- Match Ball Experience (UPDATED: Mandatory) -->
+                                <div>
+                                    <label class="block text-gray-400 text-xs font-bold mb-2 uppercase tracking-wide">Match Ball Experience <span class="text-red-500">*</span></label>
+                                    <select name="experience" required class="w-full bg-black/50 border border-gray-700 text-gray-300 px-4 py-3 rounded focus:outline-none focus:border-[#39FF14] focus:shadow-[0_0_10px_rgba(57,255,20,0.2)] transition-all">
+                                        <option value="" disabled selected>Select Experience</option>
+                                        <option>Less than 6 months</option>
+                                        <option>6 - 12 months</option>
+                                        <option>12 - 24 months</option>
+                                        <option>Above 24 months</option>
+                                    </select>
+                                </div>
+
+                                <!-- Availability (UPDATED: Mandatory) -->
+                                <div>
+                                    <label class="block text-gray-400 text-xs font-bold mb-2 uppercase tracking-wide">Match Availability <span class="text-red-500">*</span></label>
+                                    <select name="availability" required class="w-full bg-black/50 border border-gray-700 text-gray-300 px-4 py-3 rounded focus:outline-none focus:border-[#39FF14] focus:shadow-[0_0_10px_rgba(57,255,20,0.2)] transition-all">
+                                        <option value="" disabled selected>Select Availability</option>
+                                        <option>Both Weekends (Sat & Sun)</option>
+                                        <option>Saturday Only</option>
+                                        <option>Sunday Only</option>
+                                        <option>Weekdays Only</option>
+                                    </select>
+                                </div>
+
+                                <!-- Role -->
+                                <div>
+                                    <label class="block text-gray-400 text-xs font-bold mb-2 uppercase tracking-wide">Primary Role <span class="text-red-500">*</span></label>
+                                    <select name="role" required class="w-full bg-black/50 border border-gray-700 text-gray-300 px-4 py-3 rounded focus:outline-none focus:border-[#39FF14] focus:shadow-[0_0_10px_rgba(57,255,20,0.2)] transition-all">
+                                        <option value="" disabled selected>Select Role</option>
+                                        <option>Batsman</option>
+                                        <option>Bowler (Fast)</option>
+                                        <option>Bowler (Spin)</option>
+                                        <option>All-Rounder (Spin)</option>
+                                        <option>All-Rounder (Fast)</option>
+                                        <option>Wicket Keeper Batsman</option>
+                                    </select>
+                                </div>
+
+                                <!-- Batting Style (UPDATED: Mandatory radio) -->
+                                <div>
+                                    <label class="block text-gray-400 text-xs font-bold mb-2 uppercase tracking-wide">Batting Style <span class="text-red-500">*</span></label>
+                                    <div class="flex gap-4 pt-3">
+                                        <label class="flex items-center gap-2 cursor-pointer group">
+                                            <input type="radio" name="batting" value="RHB" required class="accent-[#39FF14] w-4 h-4 cursor-pointer"> 
+                                            <span class="text-gray-300 text-sm group-hover:text-white">Right Hand</span>
+                                        </label>
+                                        <label class="flex items-center gap-2 cursor-pointer group">
+                                            <input type="radio" name="batting" value="LHB" class="accent-[#39FF14] w-4 h-4 cursor-pointer"> 
+                                            <span class="text-gray-300 text-sm group-hover:text-white">Left Hand</span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <!-- Bowling Style (UPDATED: Mandatory) -->
+                                 <div class="col-span-2">
+                                    <label class="block text-gray-400 text-xs font-bold mb-2 uppercase tracking-wide">Bowling Style <span class="text-red-500">*</span></label>
+                                    <select name="bowling_style" required class="w-full bg-black/50 border border-gray-700 text-gray-300 px-4 py-3 rounded focus:outline-none focus:border-[#39FF14] focus:shadow-[0_0_10px_rgba(57,255,20,0.2)] transition-all">
+                                        <option value="NA" selected>None/NA</option>
+                                        <option>Right Arm Fast/Medium</option>
+                                        <option>Left Arm Fast/Medium</option>
+                                        <option>Right Arm Off Spin</option>
+                                        <option>Right Arm Leg Spin</option>
+                                        <option>Left Arm Orthodox</option>
+                                        <option>Left Arm Chinaman</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section 3: Kit Details -->
+                        <div class="space-y-6">
+                            <div class="flex flex-wrap justify-between items-center gap-4 border-l-4 border-[#00f3ff] pl-3">
+                                <h4 class="text-[#00f3ff] font-bold text-lg uppercase tracking-widest">3. Kit & Jersey Details</h4>
+                                <label class="inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" id="size-chart-toggle" class="sr-only peer">
+                                    <div class="relative w-11 h-6 bg-gray-700 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-[#00f3ff] rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#00f3ff]"></div>
+                                    <span class="ms-3 text-xs font-medium text-gray-300 uppercase tracking-wide">Size Chart (UK)</span>
+                                </label>
+                            </div>
+
+                            <!-- UK Size Chart (Hidden) -->
+                            <div id="size-chart" class="hidden mb-6 bg-gray-900/80 rounded-lg p-4 border border-[#00f3ff]/30 transition-all duration-300">
+                                <table class="w-full text-sm text-left text-gray-400">
+                                    <thead class="text-xs text-[#00f3ff] uppercase bg-gray-900/50">
+                                        <tr>
+                                            <th class="px-4 py-2">Size</th>
+                                            <th class="px-4 py-2">Chest (in)</th>
+                                            <th class="px-4 py-2">Waist (in)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="border-b border-gray-700 hover:bg-white/5"><td class="px-4 py-2 font-bold text-white">XS</td><td class="px-4 py-2">34-36</td><td class="px-4 py-2">28-30</td></tr>
+                                        <tr class="border-b border-gray-700 hover:bg-white/5"><td class="px-4 py-2 font-bold text-white">S</td><td class="px-4 py-2">36-38</td><td class="px-4 py-2">30-32</td></tr>
+                                        <tr class="border-b border-gray-700 hover:bg-white/5"><td class="px-4 py-2 font-bold text-white">M</td><td class="px-4 py-2">38-40</td><td class="px-4 py-2">32-34</td></tr>
+                                        <tr class="border-b border-gray-700 hover:bg-white/5"><td class="px-4 py-2 font-bold text-white">L</td><td class="px-4 py-2">40-42</td><td class="px-4 py-2">34-36</td></tr>
+                                        <tr class="border-b border-gray-700 hover:bg-white/5"><td class="px-4 py-2 font-bold text-white">XL</td><td class="px-4 py-2">42-44</td><td class="px-4 py-2">36-38</td></tr>
+                                        <tr class="border-b border-gray-700 hover:bg-white/5"><td class="px-4 py-2 font-bold text-white">XXL</td><td class="px-4 py-2">44-46</td><td class="px-4 py-2">38-40</td></tr>
+                                        <tr class="hover:bg-white/5"><td class="px-4 py-2 font-bold text-white">3XL</td><td class="px-4 py-2">46-48</td><td class="px-4 py-2">40-42</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <!-- Jersey Name -->
+                                <div>
+                                     <label class="block text-gray-400 text-xs font-bold mb-2 uppercase tracking-wide">Preferred Name on Jersey <span class="text-red-500">*</span></label>
+                                     <input type="text" name="jersey_name" required class="w-full bg-black/50 border border-gray-700 text-white px-4 py-3 rounded focus:outline-none focus:border-[#00f3ff] focus:shadow-[0_0_10px_rgba(0,243,255,0.2)] transition-all placeholder-gray-600" maxlength="15" placeholder="e.g. KOHLI">
+                                </div>
+
+                                <!-- Jersey Number -->
+                                <div>
+                                     <label class="block text-gray-400 text-xs font-bold mb-2 uppercase tracking-wide">Preferred Jersey Number <span class="text-red-500">*</span></label>
+                                     <input type="number" name="jersey_number" required class="w-full bg-black/50 border border-gray-700 text-white px-4 py-3 rounded focus:outline-none focus:border-[#00f3ff] focus:shadow-[0_0_10px_rgba(0,243,255,0.2)] transition-all placeholder-gray-600" min="0" max="999" placeholder="0-999">
+                                </div>
+
+                                <!-- Sizes -->
+                                <div>
+                                     <label class="block text-gray-400 text-xs font-bold mb-2 uppercase tracking-wide">T-Shirt Size <span class="text-red-500">*</span></label>
+                                     <select name="shirt_size" required class="w-full bg-black/50 border border-gray-700 text-gray-300 px-4 py-3 rounded focus:outline-none focus:border-[#00f3ff] focus:shadow-[0_0_10px_rgba(0,243,255,0.2)] transition-all">
+                                        <option>XS</option><option>S</option><option>M</option><option>L</option><option>XL</option><option>XXL</option><option>3XL</option>
+                                     </select>
+                                </div>
+                                 <div>
+                                     <label class="block text-gray-400 text-xs font-bold mb-2 uppercase tracking-wide">Trouser Size <span class="text-red-500">*</span></label>
+                                     <select name="trouser_size" required class="w-full bg-black/50 border border-gray-700 text-gray-300 px-4 py-3 rounded focus:outline-none focus:border-[#00f3ff] focus:shadow-[0_0_10px_rgba(0,243,255,0.2)] transition-all">
+                                        <option>XS</option><option>S</option><option>M</option><option>L</option><option>XL</option><option>XXL</option><option>3XL</option>
+                                     </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section 4: Emergency Contact -->
+                        <div class="space-y-6">
+                             <h4 class="text-[#39FF14] font-bold text-lg uppercase tracking-widest border-l-4 border-[#39FF14] pl-3">4. Emergency Contact</h4>
+                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                 <div>
+                                     <label class="block text-gray-400 text-xs font-bold mb-2 uppercase tracking-wide">Contact Name <span class="text-red-500">*</span></label>
+                                     <input type="text" name="emergency_name" required class="w-full bg-black/50 border border-gray-700 text-white px-4 py-3 rounded focus:outline-none focus:border-[#39FF14] focus:shadow-[0_0_10px_rgba(57,255,20,0.2)] transition-all placeholder-gray-600">
+                                 </div>
+                                  <div>
+                                     <label class="block text-gray-400 text-xs font-bold mb-2 uppercase tracking-wide">Relationship <span class="text-red-500">*</span></label>
+                                     <input type="text" name="emergency_relation" required class="w-full bg-black/50 border border-gray-700 text-white px-4 py-3 rounded focus:outline-none focus:border-[#39FF14] focus:shadow-[0_0_10px_rgba(57,255,20,0.2)] transition-all placeholder-gray-600">
+                                 </div>
+                                 <div class="col-span-2">
+                                     <label class="block text-gray-400 text-xs font-bold mb-2 uppercase tracking-wide">Emergency Number <span class="text-red-500">*</span></label>
+                                     <input type="tel" name="emergency_number" required class="w-full bg-black/50 border border-gray-700 text-white px-4 py-3 rounded focus:outline-none focus:border-[#39FF14] focus:shadow-[0_0_10px_rgba(57,255,20,0.2)] transition-all placeholder-gray-600">
+                                 </div>
+                             </div>
+                        </div>
+
+                        <!-- Section 5: Motivation -->
+                        <div class="space-y-6">
+                             <h4 class="text-[#00f3ff] font-bold text-lg uppercase tracking-widest border-l-4 border-[#00f3ff] pl-3">5. Motivation</h4>
+                             <div>
+                                 <label class="block text-gray-400 text-xs font-bold mb-2 uppercase tracking-wide">Why do you want to join the Volt Vipers? <span class="text-red-500">*</span></label>
+                                 <textarea name="motivation" rows="4" required class="w-full bg-black/50 border border-gray-700 text-white px-4 py-3 rounded focus:outline-none focus:border-[#00f3ff] focus:shadow-[0_0_10px_rgba(0,243,255,0.2)] transition-all placeholder-gray-600" placeholder="Tell us about your cricketing journey and why you think you'd be a good fit for the squad..."></textarea>
+                             </div>
+                        </div>
+
+                        <!-- Terms -->
+                        <div class="space-y-4 pt-6 border-t border-gray-800">
+                            <label class="flex items-start gap-3 cursor-pointer group">
+                                <input type="checkbox" required class="mt-1 w-5 h-5 accent-[#00f3ff] bg-gray-800 border-gray-600 rounded">
+                                <span class="text-gray-400 text-sm group-hover:text-white transition-colors">I verify that the information provided is correct and I am physically fit to play cricket.</span>
+                            </label>
+                            <label class="flex items-start gap-3 cursor-pointer group">
+                                <input type="checkbox" required class="mt-1 w-5 h-5 accent-[#39FF14] bg-gray-800 border-gray-600 rounded">
+                                <span class="text-gray-400 text-sm group-hover:text-white transition-colors">I agree to the Club Rules & Regulations (Constitution) and Code of Conduct.</span>
+                            </label>
+                        </div>
+
+                        <!-- Submit -->
+                        <button id="submit-btn" type="submit" class="w-full mt-6 bg-gradient-to-r from-[#39FF14] to-[#00f3ff] text-black font-black uppercase tracking-widest py-4 rounded hover:shadow-[0_0_30px_#39FF14] transition-all duration-300 transform hover:-translate-y-1 relative overflow-hidden group/btn">
+                            <span class="relative z-10">Submit Application</span>
+                            <div class="absolute inset-0 bg-white/20 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-300"></div>
+                        </button>
+                    </form>
+
+                    <!-- Success Message (Hidden by default) -->
+                    <div id="success-message" class="hidden flex-col items-center justify-center text-center py-10 space-y-6 animate-fadeIn">
+                        <div class="w-24 h-24 bg-[#39FF14]/10 rounded-full flex items-center justify-center border border-[#39FF14] shadow-[0_0_30px_#39FF14]/50 mb-4">
+                            <svg class="w-12 h-12 text-[#39FF14]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                        </div>
+                        <h3 class="text-3xl md:text-4xl font-black text-white brand-font tracking-wide">REGISTRATION <span class="text-[#39FF14]">RECEIVED</span></h3>
+                        <p class="text-gray-300 text-lg max-w-lg mx-auto leading-relaxed">
+                            Welcome to the Hive. Your application data has been securely transmitted to the Vipers High Command.
+                        </p>
+                        <div class="p-4 bg-[#39FF14]/5 border border-[#39FF14]/20 rounded text-sm text-[#39FF14]">
+                            Next Step: Keep your WhatsApp active. We will contact you for the trials.
+                        </div>
+                        <button onclick="resetFormView()" class="mt-6 px-8 py-3 border border-gray-600 text-gray-400 font-bold uppercase tracking-widest hover:border-[#00f3ff] hover:text-[#00f3ff] transition-all text-xs">
+                            Submit Another Application
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-black border-t border-[#00f3ff]/20 py-8 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4 relative z-10">
+            <div class="flex items-center gap-2">
+                <span class="brand-font text-xl font-bold text-gray-400 hover:text-white transition-colors">VOLT <span class="text-[#39FF14] neon-flicker-green">VIPERS</span></span>
+            </div>
+            <div class="text-gray-500 text-sm">&copy; 2026 Volt Vipers Cricket Club. Power & Precision.</div>
+            <div class="flex gap-4">
+                <a href="#" class="text-gray-400 hover:text-[#00f3ff] hover:drop-shadow-[0_0_5px_#00f3ff] transition-all transform hover:scale-110">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg>
+                </a>
+                <a href="#" class="text-gray-400 hover:text-[#39FF14] hover:drop-shadow-[0_0_5px_#39FF14] transition-all transform hover:scale-110">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Application Logic (Vanilla JS) -->
+    <script>
+        // --- Data Models ---
+        const players = [
+            { id: 1, name: 'Alex "Bolt" Strider', role: 'Captain / Batsman', specialty: 'Aggressive Opener', image: 'https://picsum.photos/400/500?random=1' },
+            { id: 2, name: 'Marcus "The Wall" Chen', role: 'Wicket Keeper', specialty: 'Reflex Specialist', image: 'https://picsum.photos/400/500?random=2' },
+            { id: 3, name: 'David "Velocity" Jones', role: 'Fast Bowler', specialty: '150km/h Yorkers', image: 'https://picsum.photos/400/500?random=3' },
+            { id: 4, name: 'Sam "Spinner" Gupta', role: 'All-Rounder', specialty: 'Googly Master', image: 'https://picsum.photos/400/500?random=4' },
+            { id: 5, name: 'Leo "Lefty" Thompson', role: 'Batsman', specialty: 'Cover Drive King', image: 'https://picsum.photos/400/500?random=5' },
+            { id: 6, name: 'Ryan "Rocket" Miller', role: 'Fielder', specialty: 'Run Out Expert', image: 'https://picsum.photos/400/500?random=6' },
+            { id: 7, name: 'Kian "Ace" Patel', role: 'Bowler', specialty: 'Swing Sultan', image: 'https://picsum.photos/400/500?random=7' },
+            { id: 8, name: 'Tom "Titan" Wilson', role: 'All-Rounder', specialty: 'Power Hitter', image: 'https://picsum.photos/400/500?random=8' }
+        ];
+
+        const stats = {
+            matches: 0,
+            titles: 0,
+            members: 10
+        };
+
+        // --- View Logic ---
+
+        // 1. Navigation
+        const mobileMenu = document.getElementById('mobile-menu');
+        const openIcon = document.getElementById('menu-icon-open');
+        const closeIcon = document.getElementById('menu-icon-close');
+        let isMenuOpen = false;
+
+        function toggleMenu() {
+            isMenuOpen = !isMenuOpen;
+            if (isMenuOpen) {
+                mobileMenu.classList.remove('hidden');
+                openIcon.classList.add('hidden');
+                closeIcon.classList.remove('hidden');
+            } else {
+                mobileMenu.classList.add('hidden');
+                openIcon.classList.remove('hidden');
+                closeIcon.classList.add('hidden');
+            }
+        }
+
+        function scrollToSection(id) {
+            // Close menu if open
+            if(isMenuOpen) toggleMenu();
+            
+            const element = document.getElementById(id);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        // 2. Stats Rendering & Animation
+        document.addEventListener('DOMContentLoaded', () => {
+            // Simple counter animation
+            animateValue("stat-matches", 0, stats.matches, 2000);
+            animateValue("stat-titles", 0, stats.titles, 1500);
+            animateValue("stat-members", 0, stats.members, 2000);
+
+            renderTeam();
+        });
+
+        function animateValue(id, start, end, duration) {
+            const obj = document.getElementById(id);
+            if(!obj) return;
+            // Handle case where start and end are 0 (no animation needed)
+            if (start === end) {
+                obj.innerHTML = end;
+                return;
+            }
+
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                obj.innerHTML = Math.floor(progress * (end - start) + start);
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
+
+        // 3. Team Rendering
+        function renderTeam() {
+            const grid = document.getElementById('team-grid');
+            const html = players.map(player => `
+                <div class="group relative bg-gray-900 rounded-lg overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_0_20px_rgba(57,255,20,0.2)]">
+                    <div class="absolute inset-0 border-2 border-transparent group-hover:border-[#39FF14] transition-colors duration-300 z-20 pointer-events-none rounded-lg"></div>
+                    <div class="relative h-80 overflow-hidden">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent z-10 opacity-80 group-hover:opacity-60 transition-opacity"></div>
+                        <img src="${player.image}" alt="${player.name}" class="w-full h-full object-cover filter grayscale group-hover:grayscale-0 transition-all duration-500 scale-100 group-hover:scale-110" />
+                        <div class="absolute top-4 right-4 z-20">
+                            <span class="px-3 py-1 bg-[#00f3ff]/20 text-[#00f3ff] border border-[#00f3ff] text-xs font-bold uppercase tracking-wider rounded backdrop-blur-md shadow-[0_0_10px_#00f3ff]">
+                                ${player.role}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="relative p-6 -mt-10 z-20">
+                        <h3 class="text-2xl font-bold text-white mb-1 group-hover:text-[#39FF14] group-hover:drop-shadow-[0_0_5px_#39FF14] transition-all brand-font">${player.name}</h3>
+                        <p class="text-gray-400 text-sm font-medium mb-4 flex items-center gap-2 group-hover:text-gray-200">
+                            <span class="block w-2 h-2 rounded-full bg-[#39FF14] shadow-[0_0_5px_#39FF14]"></span>
+                            ${player.specialty}
+                        </p>
+                        <div class="w-full h-[1px] bg-gray-800 group-hover:bg-[#39FF14]/50 transition-colors"></div>
+                        <div class="mt-4 flex justify-between items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform translate-y-2 group-hover:translate-y-0">
+                            <span class="text-xs text-gray-400 uppercase tracking-widest font-bold">Player Profile</span>
+                            <svg class="w-5 h-5 text-[#39FF14]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            grid.innerHTML = html;
+        }
+
+        // 4. Contact Form Logic
+        const form = document.getElementById('contact-form');
+        const submitBtn = document.getElementById('submit-btn');
+
+        // Toggle Size Chart Logic
+        document.getElementById('size-chart-toggle').addEventListener('change', function() {
+            const chart = document.getElementById('size-chart');
+            if(this.checked) {
+                chart.classList.remove('hidden');
+                chart.classList.add('block', 'animate-fadeIn');
+            } else {
+                chart.classList.add('hidden');
+                chart.classList.remove('block', 'animate-fadeIn');
+            }
+        });
+
+        function resetFormView() {
+            const successMsg = document.getElementById('success-message');
+            // Hide Success
+            successMsg.classList.add('hidden');
+            successMsg.classList.remove('flex');
+            
+            // Show Form
+            form.classList.remove('hidden');
+            form.reset();
+            
+            // Reset button state
+            submitBtn.disabled = false;
+            submitBtn.querySelector('span').innerText = 'Submit Application';
+            submitBtn.classList.remove('bg-white', 'text-black', 'shadow-none');
+            
+            // Reset Chart if open
+             const sizeToggle = document.getElementById('size-chart-toggle');
+             if(sizeToggle && sizeToggle.checked) {
+                 sizeToggle.checked = false;
+                 document.getElementById('size-chart').classList.add('hidden');
+             }
+        }
+
+        function showSuccess() {
+             // Hide Form
+             form.classList.add('hidden');
+             
+             // Show Success Message
+             const successMsg = document.getElementById('success-message');
+             successMsg.classList.remove('hidden');
+             successMsg.classList.add('flex');
+             
+             // Scroll to message if needed (optional UX improvement)
+             successMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            // Visual Feedback: Show loading state
+            const originalText = submitBtn.querySelector('span').innerText;
+            submitBtn.disabled = true;
+            submitBtn.querySelector('span').innerText = 'Transmitting...';
+            
+            // --- GOOGLE APPS SCRIPT URL ---
+            // Paste your deployed Web App URL here between the quotes
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbwHLEFls0j2noUO5EqNHvw4-HE8uQ5v-_IT4dvQi8ugErla9xgkgcNUmFaPSjEGX7g5Gw/exec';
+
+            // Check if URL is configured
+            if(scriptURL === 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE') {
+                console.warn("Google Script URL is not set. Simulating successful submission for demo purposes.");
+                console.warn("Please create a Google Sheet and Apps Script to collect real data.");
+                
+                // Simulate network delay
+                setTimeout(() => {
+                    showSuccess();
+                }, 2000);
+                return;
+            }
+
+            // Real Data Submission
+            const formData = new FormData(form);
+            const data = new URLSearchParams();
+            for (const pair of formData) {
+                data.append(pair[0], pair[1]);
+            }
+            
+            fetch(scriptURL, { 
+                method: 'POST', 
+                body: data, 
+                mode: 'no-cors'
+            })
+            .then(response => {
+                console.log('Success!', response);
+                showSuccess();
+            })
+            .catch(error => {
+                console.error('Error!', error.message);
+                alert('Transmission Failed. Check console logs.');
+                submitBtn.disabled = false;
+                submitBtn.querySelector('span').innerText = originalText;
+            });
+        });
+
+    </script>
+</body>
+</html>
